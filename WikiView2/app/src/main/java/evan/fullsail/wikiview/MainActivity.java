@@ -22,7 +22,8 @@ public class MainActivity extends Activity {
     final String home = "http://en.m.wikipedia.org";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -30,45 +31,44 @@ public class MainActivity extends Activity {
         webView = (WebView)findViewById(R.id.webView);
         webView.setWebViewClient(webViewClient);
 
-        try {
-            Intent intent = getIntent();
-            Uri uri = intent.getData();
-            if (uri != null) {
-                Log.i("URI Data", uri.toString());
-                String url = uri.toString();
-                if (url.contains(home)) {
-                    webViewClient.shouldOverrideUrlLoading(webView, url);
-                    webView.loadUrl(url);
-                }
-                else
-                {
-                    Toast.makeText(MainActivity.this, "Sorry could not find this Wikipedia Page", Toast.LENGTH_LONG).show();
-                    webViewClient.shouldOverrideUrlLoading(webView, home);
-                    webView.loadUrl(home);
-                }
+        //if there is an intent with a URL it displays the URL or defualts to the Wikipedia home page
+        Intent intent = getIntent();
+        Uri uri = intent.getData();
+        if (uri != null)
+        {
+            Log.i("MainActivity: onCreate: URI Data", uri.toString());
+            String url = uri.toString();
+            if (url.contains(home))
+            {
+                webViewClient.shouldOverrideUrlLoading(webView, url);
+                webView.loadUrl(url);
             }
             else
             {
+                Toast.makeText(MainActivity.this, "Sorry could not find this Wikipedia Page", Toast.LENGTH_LONG).show();
                 webViewClient.shouldOverrideUrlLoading(webView, home);
                 webView.loadUrl(home);
             }
         }
-        catch (Exception e)
+        else
         {
-            e.printStackTrace();
+            webViewClient.shouldOverrideUrlLoading(webView, home);
+            webView.loadUrl(home);
         }
     }
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -82,6 +82,8 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    //Sub-class used to save data on a separate thread
     private class SaveData extends AsyncTask<Void, Void, Void>
     {
         String url;
