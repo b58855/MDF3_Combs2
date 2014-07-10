@@ -11,16 +11,19 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Evan on 7/10/2014.
  */
 public class FavoritesAdapter extends ArrayAdapter<String>
 {
-    String objects[];
+    List<String> objects = new ArrayList<String>();
     Context context;
     int resource;
 
-    public FavoritesAdapter(Context context, int resource, String[] objects)
+    public FavoritesAdapter(Context context, int resource, List<String> objects)
     {
         super(context, resource, objects);
         this.objects = objects;
@@ -50,8 +53,9 @@ public class FavoritesAdapter extends ArrayAdapter<String>
             holder = (Holder)row.getTag();
         }
 
-        String object = objects[position];
-        holder.name.setText(object);
+        String object = objects.get(position);
+        String name = object.replace("http://en.m.wikipedia.org/wiki/", "");
+        holder.name.setText(name);
         holder.url.setText(object);
 
         return row;

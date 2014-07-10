@@ -34,10 +34,20 @@ public class MainActivity extends Activity {
         //if there is an intent with a URL it displays the URL or defualts to the Wikipedia home page
         Intent intent = getIntent();
         Uri uri = intent.getData();
-        if (uri != null)
+        String extra = intent.getStringExtra("url");
+        if (uri != null || extra != null)
         {
-            Log.i("MainActivity: onCreate: URI Data", uri.toString());
-            String url = uri.toString();
+            String url;
+            if (uri != null)
+            {
+                Log.i("MainActivity: onCreate: URI Data", uri.toString());
+                url = uri.toString();
+            }
+            else
+            {
+                Log.i("MainActivity: onCreate: URI Data", extra);
+                url = extra;
+            }
             if (url.contains(home))
             {
                 webViewClient.shouldOverrideUrlLoading(webView, url);
@@ -77,6 +87,12 @@ public class MainActivity extends Activity {
         {
             SaveData saveData = new SaveData(webView.getUrl(), this);
             saveData.execute();
+            return true;
+        }
+        else if (id == R.id.action_favorites)
+        {
+            Intent intent = new Intent(this, FavoritesActivity.class);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
