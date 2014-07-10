@@ -1,6 +1,7 @@
 package evan.fullsail.wikiview;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -72,9 +73,38 @@ public class MainActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_save)
+        {
+            SaveData saveData = new SaveData(webView.getUrl(), this);
+            saveData.execute();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private class SaveData extends AsyncTask<Void, Void, Void>
+    {
+        String url;
+        Context context;
+        public SaveData(String url, Context context)
+        {
+            this.url = url;
+            this.context = context;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids)
+        {
+            try
+            {
+                DataManagement.SaveNewFavorite(url, context);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
     }
 }
