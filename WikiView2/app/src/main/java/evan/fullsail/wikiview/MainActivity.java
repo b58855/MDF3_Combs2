@@ -1,17 +1,61 @@
 package evan.fullsail.wikiview;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Toast;
+
+import java.io.IOException;
 
 
 public class MainActivity extends Activity {
+
+    WebView webView;
+    final String home = "http://en.m.wikipedia.org";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        WebViewClient webViewClient = new WebViewClient();
+        webView = (WebView)findViewById(R.id.webView);
+        webView.setWebViewClient(webViewClient);
+
+        try {
+            Intent intent = getIntent();
+            Uri uri = intent.getData();
+            if (uri != null) {
+                Log.i("URI Data", uri.toString());
+                String url = uri.toString();
+                if (url.contains(home)) {
+                    webViewClient.shouldOverrideUrlLoading(webView, url);
+                    webView.loadUrl(url);
+                }
+                else
+                {
+                    Toast.makeText(MainActivity.this, "Sorry could not find this Wikipedia Page", Toast.LENGTH_LONG).show();
+                    webViewClient.shouldOverrideUrlLoading(webView, home);
+                    webView.loadUrl(home);
+                }
+            }
+            else
+            {
+                webViewClient.shouldOverrideUrlLoading(webView, home);
+                webView.loadUrl(home);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
 
