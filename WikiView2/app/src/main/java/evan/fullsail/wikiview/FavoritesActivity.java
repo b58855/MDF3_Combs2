@@ -1,5 +1,6 @@
 package evan.fullsail.wikiview;
 
+import android.app.ActionBar;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,6 +26,9 @@ public class FavoritesActivity extends ListActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
+
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         try
         {
@@ -70,5 +74,12 @@ public class FavoritesActivity extends ListActivity
         intent.putExtra("url", urls.get(position));
         startActivity(intent);
         super.onListItemClick(l, v, position, id);
+    }
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item)
+    {
+        finish();
+        return false;
     }
 }
