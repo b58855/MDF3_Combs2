@@ -1,3 +1,12 @@
+/**
+ * Created by: Evan on 7/9/2014
+ * Last Edited: 7/10/2014
+ * Project: WikiView
+ * Package: evan.fullsail.wikiview
+ * File: MainActivity.java
+ * Purpose: Main activity of project. Displays the wikipedia page.
+ */
+
 package evan.fullsail.wikiview;
 
 import android.app.Activity;
@@ -85,12 +94,14 @@ public class MainActivity extends Activity {
         int id = item.getItemId();
         if (id == R.id.action_save)
         {
+            //saves the current URL
             SaveData saveData = new SaveData(webView.getUrl(), this);
             saveData.execute();
             return true;
         }
         else if (id == R.id.action_favorites)
         {
+            //goes to Favorites Activity
             Intent intent = new Intent(this, FavoritesActivity.class);
             startActivity(intent);
             return true;

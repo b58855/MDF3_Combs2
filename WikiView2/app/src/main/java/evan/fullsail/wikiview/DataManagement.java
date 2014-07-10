@@ -1,3 +1,12 @@
+/**
+ * Created by: Evan on 7/10/2014
+ * Last Edited: 7/10/2014
+ * Project: WikiView
+ * Package: evan.fullsail.wikiview
+ * File: DataManagement.java
+ * Purpose: Saves new favorites to a file. Retrieves favorites from file.
+ */
+
 package evan.fullsail.wikiview;
 
 import android.content.Context;
@@ -11,9 +20,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-/**
- * Created by Evan on 7/10/2014.
- */
 public class DataManagement
 {
     private static final String file = "favorites";
