@@ -30,4 +30,19 @@ public class NewActivity extends Activity {
         int id = item.getItemId();
         return super.onOptionsItemSelected(item);
     }
+
+    private void TakePicture()
+    {
+
+    }
+
+    private void GetCurrentLocation()
+    {
+
+    }
+
+    private void AddItem()
+    {
+
+    }
 }
