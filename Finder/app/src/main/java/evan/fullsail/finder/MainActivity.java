@@ -14,7 +14,6 @@ import java.util.List;
 
 public class MainActivity extends ListActivity
 {
-    List<Item> items = new ArrayList<Item>();
     ListAdapter adapter;
 
     @Override
@@ -23,7 +22,7 @@ public class MainActivity extends ListActivity
         //load in list items first
         //check if there are any items
         //if no start NewActivity
-        if (items.size() <= 0)
+        if (DataManager.items.size() <= 0)
         {
             Intent intent = new Intent(this, NewActivity.class);
             startActivity(intent);
@@ -31,7 +30,7 @@ public class MainActivity extends ListActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        adapter = new ListAdapter(this, R.layout.list_item, items);
+        adapter = new ListAdapter(this, R.layout.list_item, DataManager.items);
         setListAdapter(adapter);
     }
 
