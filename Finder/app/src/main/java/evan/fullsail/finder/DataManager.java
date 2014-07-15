@@ -2,6 +2,7 @@ package evan.fullsail.finder;
 
 import android.content.Context;
 import android.location.Location;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,7 +24,8 @@ public class DataManager
     public static List<Item> items = new ArrayList<Item>();
     private static final String filename = "items";
 
-    public static void GetItems(Context context) throws IOException, JSONException {
+    public static void GetItems(Context context) throws IOException, JSONException
+    {
         FileInputStream file = null;
         file = context.openFileInput(filename);
         BufferedInputStream buffer = new BufferedInputStream(file);
@@ -48,6 +50,7 @@ public class DataManager
             Location location = (Location)object.get("location");
             Item item = new Item(id, name, imageSource, locationName, location);
             items.add(item);
+            Log.i("INFO: DataManager: GetItems", id + " " + name + " " + imageSource + " " + locationName + " " + location.toString());
         }
     }
 
@@ -58,6 +61,7 @@ public class DataManager
         {
             JSONObject object = new JSONObject();
             Item item = items.get(i);
+            Log.i("DataManager: SaveItems", item.id + " " + item.name + " " + item.imageSource + " " + item.locationName + " " + item.location);
             object.put("id", item.id);
             object.put("name", item.name);
             object.put("imageSource", item.imageSource);

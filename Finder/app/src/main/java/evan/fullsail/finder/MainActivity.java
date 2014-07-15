@@ -8,6 +8,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,14 +22,24 @@ public class MainActivity extends ListActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        //load in list items first
-        //check if there are any items
-        //if no start NewActivity
+        try
+        {
+            DataManager.GetItems(this);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
         if (DataManager.items.size() <= 0)
         {
             Intent intent = new Intent(this, NewActivity.class);
             startActivity(intent);
         }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
