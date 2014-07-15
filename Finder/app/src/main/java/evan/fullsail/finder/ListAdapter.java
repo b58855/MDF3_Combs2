@@ -54,9 +54,17 @@ public class ListAdapter extends ArrayAdapter<Item>
             holder = (Holder)row.getTag();
         }
 
-        Uri uri = Uri.parse(objects.get(i).imageSource);
+        Uri uri = null;
+        if (objects.get(i).imageSource != null) {
+            uri = Uri.parse(objects.get(i).imageSource);
+        }
         holder.imageView.setImageURI(uri);
-        holder.textView.setText(objects.get(i).name);
+        String name = "Untitle";
+        if (objects.get(i).name != null)
+        {
+            name = objects.get(i).name;
+        }
+        holder.textView.setText(name);
 
         return row;
     }

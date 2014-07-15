@@ -15,6 +15,7 @@ import java.util.List;
 public class MainActivity extends ListActivity
 {
     List<Item> items = new ArrayList<Item>();
+    ListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -29,8 +30,10 @@ public class MainActivity extends ListActivity
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
 
+        adapter = new ListAdapter(this, R.layout.list_item, items);
+        setListAdapter(adapter);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
