@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="evan.fullsail.finder" >
-    <uses-sdk android:minSdkVersion="16"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-sdk android:minSdkVersion="16" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -24,6 +26,15 @@
             android:name=".NewActivity"
             android:label="@string/title_activity_add" >
         </activity>
+        <activity
+            android:name=".FindItemActivity"
+            android:label="@string/title_activity_find_item" >
+        </activity>
+
+        <service
+            android:name=".MyIntentService"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>
