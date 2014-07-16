@@ -7,6 +7,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.Image;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,10 +31,24 @@ public class NewActivity extends Activity
     Button locationButton;
     Button addImageButton;
     Button addButton;
-    Location location;
+    Location location = new Location(LocationManager.GPS_PROVIDER);
     String imageSource;
     Random random = new Random();
     LocationManager locationManager;
+    LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location)
+        {
+            Log.i("Latitude", String.valueOf(location.getLatitude()));
+            Log.i("Longitude", String.valueOf(location.getLongitude()));
+        }
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {}
+        @Override
+        public void onProviderEnabled(String provider) {}
+        @Override
+        public void onProviderDisabled(String provider) {}
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -68,6 +83,9 @@ public class NewActivity extends Activity
                 AddItem();
             }
         });
+
+        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 0, locationListener);
     }
 
 
@@ -96,24 +114,16 @@ public class NewActivity extends Activity
 
     private void GetCurrentLocation()
     {
-        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        LocationListener locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {}
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
-            @Override
-            public void onProviderEnabled(String provider) {}
-            @Override
-            public void onProviderDisabled(String provider) {}
-        };
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        //check to see if location returns null
+        //if it does check to see if the phones location provider is on
+        //display note saying location services need to be on, or unable to get current location please wait 30 seconds and try again
         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        locationManager.removeUpdates(locationListener);
+        Log.i("NewActivity: GetCurrentLocation: Location", String.valueOf(location.getLatitude()) + " " + String.valueOf(location.getLongitude()));
     }
 
     private void AddItem()
     {
+        locationManager.removeUpdates(locationListener);
         long id = random.nextLong();
         String name = nameEditText.getText().toString();
         String locationName = locationNameEditText.getText().toString();

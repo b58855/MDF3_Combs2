@@ -75,5 +75,7 @@ public class MainActivity extends ListActivity
     protected void onListItemClick(ListView l, View v, int position, long id)
     {
         super.onListItemClick(l, v, position, id);
+        ListItemDialog listItemDialog = new ListItemDialog(DataManager.items.get(position), adapter);
+        listItemDialog.show(getFragmentManager(), "dialog_list_item");
     }
 }
