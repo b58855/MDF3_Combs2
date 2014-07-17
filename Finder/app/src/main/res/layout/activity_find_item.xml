@@ -22,11 +22,11 @@
 
     <ImageView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
+        android:layout_height="300dp"
+        android:id="@+id/locationImage"
         android:layout_gravity="center_horizontal" />
 
-    <TextView
+    <!--TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -48,5 +48,39 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Latitude"
         android:id="@+id/curLatTV"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal" /-->
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="5dp">
+
+        <FrameLayout
+            android:id="@+id/compassFrame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/compass"
+                android:layout_gravity="center"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/arrow"
+                android:layout_gravity="center"/>
+
+        </FrameLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lightIV"
+            android:layout_alignRight="@+id/compassFrame"
+            />
+    </RelativeLayout>
+
 </LinearLayout>

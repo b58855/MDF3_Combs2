@@ -1,3 +1,12 @@
+/**
+ * Created by: Evan on 7/15/2014
+ * Last Edited: 7/15/2014
+ * Project: Finder
+ * Package: evan.fullsail.finder
+ * File: DataManager.java
+ * Purpose: Holds the items list. Saves the items to file. Gets the items from file
+ */
+
 package evan.fullsail.finder;
 
 import android.content.Context;
@@ -40,11 +49,12 @@ public class DataManager
         buffer.close();
         file.close();
 
+        //parses the information from the JSON into instances of Item
         JSONArray array = new JSONArray(a);
         for (int i = 0; i < array.length(); i++)
         {
             JSONObject object = (JSONObject)array.get(i);
-            Log.i("Object", object.toString());
+            Log.i("DataManager: Object", object.toString());
             long id = object.getLong("id");
             String name = null;
             if(object.has("name"))
@@ -76,6 +86,7 @@ public class DataManager
     //saves items to file
     public static void SaveItems(Context context) throws JSONException, IOException
     {
+        //turns the instnaces of Item into a JSON string
         JSONArray array = new JSONArray();
         for (int i = 0; i < items.size(); i++)
         {

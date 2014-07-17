@@ -1,10 +1,16 @@
+/**
+ * Created by: Evan on 7/15/2014
+ * Last Edited: 7/15/2014
+ * Project: Finder
+ * Package: evan.fullsail.finder
+ * File: Item.java
+ * Purpose: Holds the information for each item
+ */
+
 package evan.fullsail.finder;
 
 import android.location.Location;
 
-/**
- * Created by Evan on 7/15/2014.
- */
 public class Item
 {
     long id;

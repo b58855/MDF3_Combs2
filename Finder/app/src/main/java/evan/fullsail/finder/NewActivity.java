@@ -1,12 +1,24 @@
+/**
+ * Created by: Evan on 7/15/2014
+ * Last Edited: 7/17/2014
+ * Project: Finder
+ * Package: evan.fullsail.finder
+ * File: NewActivity.java
+ * Purpose: Displays a form so the user can add a new item to their list.
+ */
+
 package evan.fullsail.finder;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,22 +30,24 @@ import android.widget.TextView;
 
 import org.json.JSONException;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Random;
-
-import evan.fullsail.finder.R;
 
 public class NewActivity extends Activity
 {
     EditText nameEditText;
     EditText locationNameEditText;
+    TextView locationTextView;
     ImageView imageView;
     Button locationButton;
     Button addImageButton;
     Button addButton;
-    Location location = new Location(LocationManager.GPS_PROVIDER);
     String imageSource;
     Random random = new Random();
+    Uri uri;
+    Location location = new Location(LocationManager.GPS_PROVIDER);
     LocationManager locationManager;
     LocationListener locationListener = new LocationListener() {
         @Override
@@ -50,6 +64,7 @@ public class NewActivity extends Activity
         public void onProviderDisabled(String provider) {}
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -58,7 +73,11 @@ public class NewActivity extends Activity
 
         nameEditText = (EditText)findViewById(R.id.nameET);
         locationNameEditText = (EditText)findViewById(R.id.locNameET);
+        locationTextView = (TextView)findViewById(R.id.locationTV);
+
         imageView = (ImageView)findViewById(R.id.addImageIV);
+        //inserts a placeholder image until an image is taken
+        imageView.setImageResource(R.drawable.placeholder);
 
         locationButton = (Button)findViewById(R.id.locationButton);
         locationButton.setOnClickListener(new View.OnClickListener() {
@@ -84,10 +103,22 @@ public class NewActivity extends Activity
             }
         });
 
+        //starts location updates
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 0, locationListener);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100 && resultCode == RESULT_OK)
+        {
+            //displays the image just taken
+            imageSource = uri.toString();
+            imageView.setImageURI(uri);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -109,7 +140,29 @@ public class NewActivity extends Activity
 
     private void TakePicture()
     {
+        //the current time in milliseconds is used to create a unique filename
+        Calendar cal = Calendar.getInstance();
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), ("finder_" + cal.getTimeInMillis() + ".jpg"));
+        Log.i("FilePath", file.getAbsolutePath());
+        if (file.exists())
+        {
+            //deletes the file if one already exists
+            file.delete();
+        }
+        try
+        {
+            file.createNewFile();
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+        uri = Uri.fromFile(file);
 
+        //creates and sends the intent to the camera app
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        startActivityForResult(intent, 100);
     }
 
     private void GetCurrentLocation()
@@ -118,9 +171,11 @@ public class NewActivity extends Activity
         //if it does check to see if the phones location provider is on
         //display note saying location services need to be on, or unable to get current location please wait 30 seconds and try again
         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        Log.i("NewActivity: GetCurrentLocation: Location", String.valueOf(location.getLatitude()) + " " + String.valueOf(location.getLongitude()));
+        Log.i("NewActivity: Location", String.valueOf(location.getLatitude()) + " " + String.valueOf(location.getLongitude()));
+        locationTextView.setText("Longitude: " + String.valueOf(location.getLongitude()) + ", Latitude: " + String.valueOf(location.getLatitude()));
     }
 
+    //adds item to the list and saves it
     private void AddItem()
     {
         locationManager.removeUpdates(locationListener);
@@ -142,5 +197,8 @@ public class NewActivity extends Activity
         {
             e.printStackTrace();
         }
+        //returns to the main screen
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }

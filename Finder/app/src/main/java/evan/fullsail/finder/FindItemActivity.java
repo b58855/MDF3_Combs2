@@ -1,36 +1,47 @@
+/**
+ * Created by: Evan on 7/15/2014
+ * Last Edited: 7/15/2014
+ * Project: Finder
+ * Package: evan.fullsail.finder
+ * File: FindItemActivity.java
+ * Purpose: This activity helps the user to find the item they are searching for. It displays a picture of the location (if there is one), a compass to point them in the right direction
+ */
+
 package evan.fullsail.finder;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Matrix;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import evan.fullsail.finder.R;
-
 public class FindItemActivity extends Activity
 {
     TextView name;
     TextView locName;
-    TextView locationTV;
-    TextView longitude;
-    TextView latitude;
     ImageView image;
+    ImageView compass;
+    ImageView arrow;
+    ImageView light;
+    Location target = new Location(LocationManager.GPS_PROVIDER);
     LocationManager locationManager;
-    Location location;
+    Location current;
     LocationListener locationListener = new LocationListener()
     {
         @Override
         public void onLocationChanged(Location location)
         {
-            SetLocation(location);
+            current = location;
+            CompareLocations();
         }
         @Override
         public void onStatusChanged(String s, int i, Bundle bundle){}
@@ -43,29 +54,36 @@ public class FindItemActivity extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        //starts location services
+        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_item);
 
         name = (TextView)findViewById(R.id.nameFTV);
         locName = (TextView)findViewById(R.id.locNameFTV);
-        locationTV = (TextView)findViewById(R.id.locationFTV);
-        longitude = (TextView)findViewById(R.id.curLongTV);
-        latitude = (TextView)findViewById(R.id.curLatTV);
-        image = (ImageView)findViewById(R.id.imageView);
+        image = (ImageView)findViewById(R.id.locationImage);
+        image.setImageResource(R.drawable.placeholder);
+        light = (ImageView)findViewById(R.id.lightIV);
+        light.setImageResource(R.drawable.redlight);
+        compass = (ImageView)findViewById(R.id.compass);
+        compass.setImageResource(R.drawable.compass);
+        arrow = (ImageView)findViewById(R.id.arrow);
+        arrow.setImageResource(R.drawable.arrow);
 
+        //sets the screens information to the desired item's information
         Intent intent = getIntent();
         name.setText(intent.getStringExtra("name"));
         locName.setText(intent.getStringExtra("locName"));
-        locationTV.setText("Longitude: " + intent.getDoubleExtra("longitude", 0) + " Latitude: " + intent.getDoubleExtra("latitude", 0));
+        target.setLatitude(intent.getDoubleExtra("latitude", 0));
+        target.setLongitude(intent.getDoubleExtra("longitude", 0));
         String imageSource = intent.getStringExtra("imageUri");
-        Uri uri = null;// = Uri.parse(imageSource);
+        Uri uri = Uri.parse(imageSource);
         if (uri != null)
         {
             image.setImageURI(uri);
         }
-
-        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
     }
 
 
@@ -88,10 +106,27 @@ public class FindItemActivity extends Activity
         return super.onOptionsItemSelected(item);
     }
 
-    private void SetLocation(Location location)
+    //compares the current location with the desired location and changes the screen images
+    private void CompareLocations()
     {
-        this.location = location;
-        longitude.setText("Longitude: " + location.getLongitude());
-        latitude.setText("Latitude: " + location.getLatitude());
+        //gets distance and if close enough it displays a green light instead of a red light image
+        float distance = current.distanceTo(target);
+        Log.i("FindItemActivity: Distance", String.valueOf(distance));
+        if (distance >= 5)
+        {
+            light.setImageResource(R.drawable.redlight);
+        }
+        else
+        {
+            light.setImageResource(R.drawable.bluelight);
+        }
+
+        //gets the direction of the item then rotates the image to point in that direction
+        float bearing = current.bearingTo(target);
+        Log.i("FindItemActivity: Bearing", String.valueOf(bearing));
+        Matrix matrix=new Matrix();
+        arrow.setScaleType(ImageView.ScaleType.MATRIX);
+        matrix.postRotate(bearing, 108f, 108f);
+        arrow.setImageMatrix(matrix);
     }
 }

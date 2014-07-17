@@ -1,3 +1,12 @@
+/**
+ * Created by: Evan on 7/15/2014
+ * Last Edited: 7/17/2014
+ * Project: Finder
+ * Package: evan.fullsail.finder
+ * File: ListAdapter.java
+ * Purpose: Adapter that controls what is displayed in the MainActivity list
+ */
+
 package evan.fullsail.finder;
 
 import android.app.Activity;
@@ -10,13 +19,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Evan on 7/15/2014.
- */
 public class ListAdapter extends ArrayAdapter<Item>
 {
     List<Item> objects = new ArrayList<Item>();
@@ -55,11 +60,13 @@ public class ListAdapter extends ArrayAdapter<Item>
         }
 
         Uri uri = null;
+        //if no picture it defualts to the placeholder image
+        holder.imageView.setImageResource(R.drawable.placeholder);
         if (objects.get(i).imageSource != null) {
             uri = Uri.parse(objects.get(i).imageSource);
         }
         holder.imageView.setImageURI(uri);
-        String name = "Untitle";
+        String name = "Untitled";
         if (objects.get(i).name != null)
         {
             name = objects.get(i).name;

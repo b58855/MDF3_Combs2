@@ -1,3 +1,12 @@
+/**
+ * Created by: Evan on 7/15/2014
+ * Last Edited: 7/17/2014
+ * Project: Finder
+ * Package: evan.fullsail.finder
+ * File: ListItemDialog.java
+ * Purpose: Dialog asking if the user wants to delete the item, or search for it.
+ */
+
 package evan.fullsail.finder;
 
 import android.app.AlertDialog;
@@ -8,9 +17,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-/**
- * Created by Evan on 7/15/2014.
- */
+import org.json.JSONException;
+
+import java.io.IOException;
+
 public class ListItemDialog extends DialogFragment
 {
     Item item;
@@ -26,30 +36,49 @@ public class ListItemDialog extends DialogFragment
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
+        //creates and displays the options
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_list_item, null);
-        builder.setView(view);
-        builder.setPositiveButton("Search for Item", new DialogInterface.OnClickListener()
+        builder.setPositiveButton("Search", new DialogInterface.OnClickListener()
         {
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
             {
+                //sends the user to the find item screen
                 Intent intent = new Intent(getActivity(), FindItemActivity.class);
                 intent.putExtra("name", item.name);
                 intent.putExtra("locName", item.locationName);
-                intent.putExtra("longitude", item.location.getLongitude());
-                intent.putExtra("latitude", item.location.getLatitude());
                 intent.putExtra("imageUri", item.imageSource);
                 startActivity(intent);
                 dismiss();
             }
         });
-        builder.setNegativeButton("Delete Item", new DialogInterface.OnClickListener()
+        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener()
         {
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
             {
+                dismiss();
+            }
+        });
+        builder.setNegativeButton("Delete", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i)
+            {
+                //deletes item from list
                 DataManager.items.remove(0);
+                try
+                {
+                    DataManager.SaveItems(getActivity());
+                }
+                catch(JSONException e)
+                {
+                    e.printStackTrace();
+                }
+                catch(IOException e)
+                {
+                    e.printStackTrace();
+                }
                 dismiss();
             }
         });
@@ -59,6 +88,7 @@ public class ListItemDialog extends DialogFragment
     @Override
     public void dismiss()
     {
+        //updates the list in case an item was deleted
         super.dismiss();
         adapter.notifyDataSetChanged();
     }
