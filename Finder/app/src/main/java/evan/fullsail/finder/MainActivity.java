@@ -30,24 +30,27 @@ public class MainActivity extends ListActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        //gets items from file and adds them to a list
-        try
+        if(DataManager.items.size() <= 0)
         {
-            DataManager.GetItems(this);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        catch (JSONException e)
-        {
-            e.printStackTrace();
-        }
-        //if the list is empty start NewActivity and take the user straight to the add new item screen
-        if (DataManager.items.size() <= 0)
-        {
-            Intent intent = new Intent(this, NewActivity.class);
-            startActivity(intent);
+            //gets items from file and adds them to a list
+            try
+            {
+                DataManager.GetItems(this);
+            }
+            catch(IOException e)
+            {
+                e.printStackTrace();
+            }
+            catch(JSONException e)
+            {
+                e.printStackTrace();
+            }
+            //if the list is empty start NewActivity and take the user straight to the add new item screen
+            if(DataManager.items.size() <= 0)
+            {
+                Intent intent = new Intent(this, NewActivity.class);
+                startActivity(intent);
+            }
         }
 
         super.onCreate(savedInstanceState);
