@@ -3,22 +3,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@drawable/background_gradient">
+              android:layout_height="match_parent">
 
     <ImageButton
         android:id="@+id/widgetButton"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="1.5"
-        android:src="@drawable/ic_launcher"
-        android:scaleType="fitCenter"
-        />
+        android:layout_weight="1"
+        android:src="@drawable/ic_launcher"/>
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:text="No Items"
+        android:text="New Text"
         android:id="@+id/widgetTV"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"

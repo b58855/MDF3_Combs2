@@ -1,4 +1,4 @@
-package evan.fullsail.finder.widget;
+package evan.fullsail.finder;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -6,9 +6,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.RemoteViews;
-
-import evan.fullsail.finder.R;
 
 /**
  * Created by Evan on 7/22/2014.
@@ -40,10 +37,5 @@ public class WidgetProvider extends AppWidgetProvider
     public void onReceive(Context context, Intent intent)
     {
         super.onReceive(context, intent);
-
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_finder);
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-        ComponentName appWidgetIds = new ComponentName(context, WidgetProvider.class);
-        appWidgetManager.updateAppWidget(appWidgetIds, views);
     }
 }

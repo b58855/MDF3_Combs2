@@ -14,7 +14,7 @@ import android.location.Location;
 public class Item
 {
     long id;
-    String name;
+    public String name;
     String imageSource;
     String locationName;
     Location location;
