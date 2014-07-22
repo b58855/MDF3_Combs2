@@ -56,20 +56,14 @@ public class WidgetConfigActivity extends Activity
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getBaseContext());
                 RemoteViews views = new RemoteViews(getBaseContext().getPackageName(), R.layout.widget_finder);
 
-                if (WidgetProvider.items.size() > 0)
-                {
-                    views.setTextViewText(R.id.widgetTV, WidgetProvider.items.get(0).name);
-                }
-                else
-                {
-                    views.setTextViewText(R.id.widgetTV, "");
-                }
-
                 //pending intent for the launch button to launch the app
                 Intent launchIntent = new Intent(getBaseContext(), MainActivity.class);
                 PendingIntent launchPendingIntent = PendingIntent.getActivity(getBaseContext(), 565428, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                 views.setOnClickPendingIntent(R.id.widgetButton, launchPendingIntent);
                 appWidgetManager.updateAppWidget(appWidgetId, views);
+
+               // Intent serviceIntent = new Intent(getBaseContext(), WidgetService.class);
+                //startService(serviceIntent);
 
                 //returns the results
                 Intent intent = new Intent();
