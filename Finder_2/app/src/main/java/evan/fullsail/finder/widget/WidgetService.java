@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
@@ -26,10 +27,12 @@ import evan.fullsail.finder.R;
 
 public class WidgetService extends Service
 {
+    public static boolean service = false;
     int[] widgetIds;
-    int index = 0;
+    public static int index = 0;
     public static List<Item> items = new ArrayList<Item>();
     Context context;
+    AppWidgetManager appWidgetManager;
 
     final Handler handler = new Handler();
     Timer timer = new Timer();
@@ -48,7 +51,7 @@ public class WidgetService extends Service
                     for (int widgetId : widgetIds)
                     {
                         UpdateList(context);
-                        UpdateTextView();
+                        UpdateTextView(appWidgetManager);
                     }
                 }
             });
@@ -70,17 +73,38 @@ public class WidgetService extends Service
     public int onStartCommand(Intent intent, int flags, int startId)
     {
         Log.i("WidgetService", "onStartCommand");
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this.getApplicationContext());
+        appWidgetManager = AppWidgetManager.getInstance(this.getApplicationContext());
         widgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
         context = this.getApplicationContext();
         UpdateList(context);
-        UpdateTextView();
+        UpdateTextView(appWidgetManager);
 
         //Sets PendingIntent for Launch Button
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_finder);
         Intent launchIntent = new Intent(context, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 565428, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.widgetButton, pendingIntent);
+
+        //pending intent for next item button
+        Intent nextIntent = new Intent(getBaseContext(), WidgetProvider.class);
+        nextIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        nextIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetIds);
+        int id = 505287;
+        nextIntent.putExtra("id", id);
+
+        PendingIntent cPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 505287, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setOnClickPendingIntent(R.id.nextButton, cPendingIntent);
+
+        //pending intent for previous item button
+        Intent pevIntent = new Intent(getBaseContext(), WidgetProvider.class);
+        pevIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        pevIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetIds);
+        int bId = 16546;
+        pevIntent.putExtra("id", bId);
+
+        PendingIntent bPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 16546, pevIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setOnClickPendingIntent(R.id.prevButton, bPendingIntent);
+
         appWidgetManager.updateAppWidget(widgetIds, views);
 
 
@@ -118,7 +142,7 @@ public class WidgetService extends Service
         }
     }
 
-    private void UpdateTextView()
+    private void UpdateTextView(AppWidgetManager appWidgetManager)
     {
         Log.i("WidgetService", "UpdateTextView");
         index++;
@@ -132,11 +156,15 @@ public class WidgetService extends Service
         if (items.size() > 0)
         {
             views.setTextViewText(R.id.widgetTV, items.get(index).name);
+            Uri uri = Uri.parse(items.get(index).imageSource);
+            views.setImageViewUri(R.id.imageView, uri);
             Log.i("UpdateTextView", items.get(index).name);
         }
         else
         {
             views.setTextViewText(R.id.widgetTV, "No Items");
+            views.setImageViewUri(R.id.imageView, null);
         }
+        appWidgetManager.updateAppWidget(widgetIds, views);
     }
 }

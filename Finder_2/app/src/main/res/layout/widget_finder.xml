@@ -10,18 +10,50 @@
         android:id="@+id/widgetButton"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="1.5"
+        android:layout_weight="1.75"
         android:src="@drawable/ic_launcher"
         android:scaleType="fitCenter"
         />
 
-    <TextView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:text="No Items"
-        android:id="@+id/widgetTV"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="1"
-        android:gravity="center"/>
+        android:layout_weight="1.75">
+
+        <ImageButton
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/nextButton"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/prevButton"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="No Items"
+            android:id="@+id/widgetTV"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:textColor="@color/grey"/>
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/imageView"
+            android:layout_margin="2dp"/>
+    </LinearLayout>
 
 </LinearLayout>

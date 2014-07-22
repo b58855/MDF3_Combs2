@@ -15,7 +15,7 @@ public class Item
 {
     long id;
     public String name;
-    String imageSource;
+    public String imageSource;
     String locationName;
     Location location;
 
