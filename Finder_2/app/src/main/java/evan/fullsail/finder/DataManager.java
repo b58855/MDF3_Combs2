@@ -49,6 +49,7 @@ public class DataManager
         buffer.close();
         file.close();
 
+        items.clear();
         //parses the information from the JSON into instances of Item
         JSONArray array = new JSONArray(a);
         for (int i = 0; i < array.length(); i++)

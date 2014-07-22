@@ -9,6 +9,6 @@
                     android:resizeMode="horizontal"
                     android:widgetCategory="home_screen"
                     android:configure="evan.fullsail.finder.widget.WidgetConfigActivity"
-                    android:initialKeyguardLayout="@layout/finder_widget">
+                    android:initialKeyguardLayout="@layout/widget_finder">
 
 </appwidget-provider>
