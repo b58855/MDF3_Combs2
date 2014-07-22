@@ -1,6 +1,7 @@
 package evan.fullsail.finder.widget;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import android.widget.RemoteViews;
 import java.util.Map;
 import java.util.Set;
 
+import evan.fullsail.finder.MainActivity;
 import evan.fullsail.finder.R;
 
 public class WidgetConfigActivity extends Activity
@@ -54,8 +56,26 @@ public class WidgetConfigActivity extends Activity
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getBaseContext());
                 RemoteViews views = new RemoteViews(getBaseContext().getPackageName(), R.layout.widget_finder);
 
+                if (WidgetProvider.items.size() > 0)
+                {
+                    views.setTextViewText(R.id.widgetTV, WidgetProvider.items.get(0).name);
+                }
+                else
+                {
+                    views.setTextViewText(R.id.widgetTV, "");
+                }
 
-                //need to set up Provider and Widget before moving on
+                //pending intent for the launch button to launch the app
+                Intent launchIntent = new Intent(getBaseContext(), MainActivity.class);
+                PendingIntent launchPendingIntent = PendingIntent.getActivity(getBaseContext(), 565428, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                views.setOnClickPendingIntent(R.id.widgetButton, launchPendingIntent);
+                appWidgetManager.updateAppWidget(appWidgetId, views);
+
+                //returns the results
+                Intent intent = new Intent();
+                intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
 
