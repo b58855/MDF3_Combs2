@@ -18,7 +18,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,16 +28,51 @@
         <activity
             android:name=".NewActivity"
             android:label="@string/title_activity_add"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".FindItemActivity"
             android:label="@string/title_activity_find_item"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
 
         <service
             android:name=".NotifyService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+
+        <activity
+            android:name=".widget.WidgetConfigActivity"
+            android:label="@string/title_activity_widget_config" >
+        </activity>
+        <activity
+            android:name=".WidgetConfigActivity"
+            android:label="@string/title_activity_widget_config" >
+        </activity>
+        <activity android:name=".FinderWidgetConfigureActivity" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <receiver android:name=".FinderWidget" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/finder_widget_info" />
+        </receiver>
+
+        <activity
+            android:name="evan.fullsail.finder2.widget.WidgetConfigActivity"
+            android:label="@string/title_activity_widget_config" >
+        </activity>
+
+        <service
+            android:name=".WidgetService"
             android:enabled="true"
             android:exported="true" >
         </service>
