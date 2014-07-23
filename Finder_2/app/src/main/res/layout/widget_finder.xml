@@ -13,7 +13,7 @@
         android:layout_weight="1.75"
         android:src="@drawable/ic_launcher"
         android:scaleType="fitCenter"
-        />
+        android:background="@android:color/transparent"/>
 
     <LinearLayout
         android:orientation="vertical"
@@ -25,13 +25,15 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/nextButton"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:background="@android:color/transparent"/>
 
         <ImageButton
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/prevButton"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:background="@android:color/transparent"/>
     </LinearLayout>
 
     <LinearLayout
