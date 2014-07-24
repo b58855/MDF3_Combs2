@@ -1,14 +1,22 @@
 package evan.fullsail.finder.widget;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -58,6 +66,47 @@ public class WidgetService extends Service
         }
     };
 
+    LocationManager locationManager;
+    LocationListener locationListener = new LocationListener()
+    {
+        @Override
+        public void onLocationChanged(Location location)
+        {
+            for (int i = 0; i < items.size(); i++)
+            {
+                if (items.get(i).location != null)
+                {
+                    if (location.distanceTo(items.get(i).location) <= 10)
+                    {
+                        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_finder);
+                        views.setTextViewText(R.id.widgetTV, items.get(i).name);
+                        Uri uri = Uri.parse(items.get(i).imageSource);
+                        try
+                        {
+                            //scales down a bitmap to reduce memory usage
+                            Bitmap image = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+                            image = Bitmap.createScaledBitmap(image, (int)(image.getWidth() * 0.05), (int)(image.getHeight() * 0.05), false);
+                            views.setImageViewBitmap(R.id.imageView, image);
+                        }
+                        catch (IOException e)
+                        {
+                            e.printStackTrace();
+                            views.setImageViewUri(R.id.imageView, null);
+                        }
+                        Log.i("UpdateTextView", items.get(i).name);
+                        appWidgetManager.updateAppWidget(widgetIds, views);
+                    }
+                }
+            }
+        }
+        @Override
+        public void onStatusChanged(String s, int i, Bundle bundle){}
+        @Override
+        public void onProviderEnabled(String s){}
+        @Override
+        public void onProviderDisabled(String s){}
+    };
+
     public WidgetService()
     {
     }
@@ -82,7 +131,7 @@ public class WidgetService extends Service
         //Sets PendingIntent for Launch Button
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_finder);
         Intent launchIntent = new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 565428, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 565428, launchIntent, PendingIntent.FLAG_NO_CREATE);
         views.setOnClickPendingIntent(R.id.widgetButton, pendingIntent);
 
         //pending intent for next item button
@@ -112,10 +161,12 @@ public class WidgetService extends Service
         SharedPreferences preferences = context.getSharedPreferences("finder_widget_pref", MODE_PRIVATE);
         int minutes = preferences.getInt("minutes", 60) * 1000;
         timer.schedule(update, minutes);
+        //if nearby is set to true start the location requests
         boolean nearby = preferences.getBoolean("nearbyItems", false);
         if (nearby)
         {
-            //start LocationListener
+            locationManager = (LocationManager)getSystemService(getBaseContext().LOCATION_SERVICE);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 15000, 30, locationListener);
         }
 
         return super.onStartCommand(intent, flags, startId);
@@ -157,7 +208,18 @@ public class WidgetService extends Service
         {
             views.setTextViewText(R.id.widgetTV, items.get(index).name);
             Uri uri = Uri.parse(items.get(index).imageSource);
-            views.setImageViewUri(R.id.imageView, uri);
+            try
+            {
+                //scales down a bitmap to reduce memory usage
+                Bitmap image = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+                image = Bitmap.createScaledBitmap(image, (int)(image.getWidth() * 0.05), (int)(image.getHeight() * 0.05), false);
+                views.setImageViewBitmap(R.id.imageView, image);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+                views.setImageViewUri(R.id.imageView, null);
+            }
             Log.i("UpdateTextView", items.get(index).name);
         }
         else

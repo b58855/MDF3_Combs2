@@ -56,8 +56,11 @@ public class MainActivity extends ListActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        adapter = new ListAdapter(this, R.layout.list_item, DataManager.items);
-        setListAdapter(adapter);
+        if (adapter == null)
+        {
+            adapter = new ListAdapter(this, R.layout.list_item, DataManager.items);
+            setListAdapter(adapter);
+        }
 
         //gets the preferences and if the service is supposed to be on turns on the service
         final SharedPreferences preferences = getSharedPreferences("finder_pref", MODE_PRIVATE);

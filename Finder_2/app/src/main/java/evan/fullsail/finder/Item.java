@@ -17,7 +17,7 @@ public class Item
     public String name;
     public String imageSource;
     String locationName;
-    Location location;
+    public Location location;
 
     public Item (long id, String name, String imageSource, String locationName, Location location)
     {

@@ -58,7 +58,7 @@ public class WidgetConfigActivity extends Activity
 
                 //pending intent for the launch button to launch the app
                 Intent launchIntent = new Intent(getBaseContext(), MainActivity.class);
-                PendingIntent launchPendingIntent = PendingIntent.getActivity(getBaseContext(), 565428, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent launchPendingIntent = PendingIntent.getActivity(getBaseContext(), 565428, launchIntent, PendingIntent.FLAG_NO_CREATE);
                 views.setOnClickPendingIntent(R.id.widgetButton, launchPendingIntent);
 
                 //pending intent for next item button
