@@ -1,23 +1,26 @@
+/**
+ * Created by: Evan on 7/22/2014
+ * Last Edited: 7/24/2014
+ * Project: Finder
+ * Package: evan.fullsail.finder
+ * File: WidgetConfigActivity.java
+ * Purpose: Called upon the initial creation of the widget. Allows user to set up widget how they want it.
+ */
+
 package evan.fullsail.finder.widget;
 
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RemoteViews;
-
-import java.util.Map;
-import java.util.Set;
 
 import evan.fullsail.finder.MainActivity;
 import evan.fullsail.finder.R;

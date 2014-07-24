@@ -1,7 +1,14 @@
+/**
+ * Created by: Evan on 7/22/2014
+ * Last Edited: 7/24/2014
+ * Project: Finder
+ * Package: evan.fullsail.finder
+ * File: WidgetService.java
+ * Purpose: Main control of the Widget. Updates the widget periodically.
+ */
+
 package evan.fullsail.finder.widget;
 
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;

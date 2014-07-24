@@ -25,9 +25,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Evan on 7/15/2014.
- */
 public class DataManager
 {
     public static List<Item> items = new ArrayList<Item>();

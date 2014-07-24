@@ -1,3 +1,12 @@
+/**
+ * Created by: Evan on 7/22/2014
+ * Last Edited: 7/24/2014
+ * Project: Finder
+ * Package: evan.fullsail.finder
+ * File: WidgetProvider.java
+ * Purpose: Updates the widget, and starts the WidgetService on start-up.
+ */
+
 package evan.fullsail.finder.widget;
 
 import android.app.PendingIntent;
@@ -13,9 +22,6 @@ import android.widget.RemoteViews;
 import evan.fullsail.finder.MainActivity;
 import evan.fullsail.finder.R;
 
-/**
- * Created by Evan on 7/22/2014.
- */
 public class WidgetProvider extends AppWidgetProvider
 {
 
