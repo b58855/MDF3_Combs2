@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@drawable/background_gradient">
+
+    <ImageButton
+        android:id="@+id/widgetButton"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1.75"
+        android:src="@drawable/launch"
+        android:scaleType="fitCenter"
+        android:background="@android:color/transparent"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1.75">
+
+        <ImageButton
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/nextButton"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:src="@drawable/arrow_up"
+            android:scaleType="fitCenter" />
+
+        <ImageButton
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/prevButton"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:src="@drawable/arrow_down"
+            android:scaleType="fitCenter" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="No Items"
+            android:id="@+id/widgetTV"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:textColor="@color/grey"/>
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/imageView"
+            android:layout_margin="2dp"/>
+    </LinearLayout>
+
+</LinearLayout>
