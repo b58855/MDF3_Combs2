@@ -22,27 +22,32 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONException;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Random;
 
 public class NewActivity extends Activity
 {
+    WebView webView;
     TextView locationTextView;
     ImageView imageView;
     String imageSource;
+    String itemName;
+    String locName;
+    String sourceHtml;
+    String displayHtml;
     Random random = new Random();
     Uri uri;
     Location location = new Location(LocationManager.GPS_PROVIDER);
@@ -69,8 +74,17 @@ public class NewActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new);
 
-        WebView webView = (WebView)findViewById(R.id.webView);
-        webView.loadUrl("file:///android_asset/newItem.html");
+        try {
+            sourceHtml = HtmlToString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        webView = (WebView)findViewById(R.id.webView);
+        displayHtml = sourceHtml.replaceAll("%NAME_VALUE%", "");
+        displayHtml = displayHtml.replaceAll("%LOC_NAME_VALUE%", "");
+        displayHtml = displayHtml.replaceAll("%IMG_SRC%", "");
+        webView.loadDataWithBaseURL("file:///android_asset/newItem.html", displayHtml, "text/html", "utf-8", null);
         //sets the background to transparent in order to see the same background across activities
         webView.setBackgroundColor(0);
         webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
@@ -92,7 +106,10 @@ public class NewActivity extends Activity
         {
             //displays the image just taken
             imageSource = uri.toString();
-            imageView.setImageURI(uri);
+            displayHtml = sourceHtml.replaceAll("%NAME_VALUE%", itemName);
+            displayHtml = displayHtml.replaceAll("%LOC_NAME_VALUE%", locName);
+            displayHtml = displayHtml.replaceAll("%IMG_SRC%", imageSource);
+            webView.loadDataWithBaseURL("file:///android_asset/newItem.html", displayHtml, "text/html", "utf-8", null);
         }
     }
 
@@ -114,21 +131,37 @@ public class NewActivity extends Activity
         return super.onOptionsItemSelected(item);
     }
 
-
-
-
+    //converts the html file into a string in order to manipulate it to add data
+    private String HtmlToString() throws IOException
+    {
+        InputStream file = getAssets().open("newItem.html");
+        BufferedInputStream buffer = new BufferedInputStream(file);
+        StringBuffer stringBuffer = new StringBuffer();
+        while (buffer.available() != 0)
+        {
+            char c = (char)buffer.read();
+            stringBuffer.append(c);
+        }
+        String a = new String(stringBuffer);
+        buffer.close();
+        file.close();
+        Log.i("HtmlToString: html string", a);
+        return a;
+    }
 
     private class WebViewInterface
     {
-        Context context;
-        public WebViewInterface(Context context)
+        Activity activity;
+        public WebViewInterface(Activity activity)
         {
-            this.context = context;
+            this.activity = activity;
         }
 
         @JavascriptInterface
-        public void TakePicture()
+        public void TakePicture(String name, String locationName)
         {
+            itemName = name;
+            locName = locationName;
             //the current time in milliseconds is used to create a unique filename
             Calendar cal = Calendar.getInstance();
             File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), ("finder_" + cal.getTimeInMillis() + ".jpg"));
@@ -162,12 +195,11 @@ public class NewActivity extends Activity
             //display note saying location services need to be on, or unable to get current location please wait 30 seconds and try again
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             Log.i("NewActivity: Location", String.valueOf(location.getLatitude()) + " " + String.valueOf(location.getLongitude()));
-            locationTextView.setText("Longitude: " + String.valueOf(location.getLongitude()) + ", Latitude: " + String.valueOf(location.getLatitude()));
         }
 
         //adds item to the list and saves it
         @JavascriptInterface
-        public void AddItem(String name, String locationName)
+        public void Submit(String name, String locationName)
         {
             locationManager.removeUpdates(locationListener);
             long id = random.nextLong();
@@ -176,7 +208,7 @@ public class NewActivity extends Activity
             DataManager.items.add(item);
             try
             {
-                DataManager.SaveItems(context);
+                DataManager.SaveItems(activity);
             }
             catch (JSONException e)
             {
@@ -187,7 +219,7 @@ public class NewActivity extends Activity
                 e.printStackTrace();
             }
             //returns to the main screen
-            Intent intent = new Intent(context, MainActivity.class);
+            Intent intent = new Intent(activity, MainActivity.class);
             startActivity(intent);
         }
     }

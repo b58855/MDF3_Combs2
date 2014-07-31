@@ -9,7 +9,9 @@
 
 function takePicture()
 {
-	Android.TakePicture();
+	var name = document.getElementById('nameText').value;
+	var loc = document.getElementById('locationNameText').value;
+	Android.TakePicture(name, loc);
 }
 function getLoc()
 {
@@ -17,7 +19,7 @@ function getLoc()
 }
 function submit()
 {
-	var name = document.getElementById('nameTextField').value;
-	var loc = document.getElementById('locNameTextField').value;
+	var name = document.getElementById('nameText').value;
+	var loc = document.getElementById('locationNameText').value;
 	Android.Submit(name, loc)
 }

@@ -20,12 +20,12 @@
 
     <div id="nameDiv">
         <label for="nameText">Name:</label>
-        <input type="text" name="name" id="nameText" class="textfields"/>
+        <input type="text" name="name" value="%NAME_VALUE%" id="nameText" class="textfields"/>
     </div>
 
     <div id="imageDiv">
     	<div>
-        	<img src="" alt="Image" class=""/>
+        	<img src="%IMG_SRC%" alt="Image" class="" id="imageID"/>
         </div>
         <div>
         	<input name="takeImage" type="button" value="Take Image" id="imageButton" class="buttons" onclick="takePicture();"/>
@@ -38,7 +38,7 @@
         </div>
         <div>
         	<label for="locationNameText">Location Name:</label>
-        	<input type="text" name="locationName" id="locationNameText" class="textfields"/>
+        	<input type="text" name="locationName" value="%LOC_NAME_VALUE%" id="locationNameText" class="textfields"/>
         </div>
     </div>
 
