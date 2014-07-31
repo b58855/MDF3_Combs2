@@ -23,6 +23,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -37,13 +40,8 @@ import java.util.Random;
 
 public class NewActivity extends Activity
 {
-    EditText nameEditText;
-    EditText locationNameEditText;
     TextView locationTextView;
     ImageView imageView;
-    Button locationButton;
-    Button addImageButton;
-    Button addButton;
     String imageSource;
     Random random = new Random();
     Uri uri;
@@ -69,39 +67,17 @@ public class NewActivity extends Activity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add);
+        setContentView(R.layout.activity_new);
 
-        nameEditText = (EditText)findViewById(R.id.nameET);
-        locationNameEditText = (EditText)findViewById(R.id.locNameET);
-        locationTextView = (TextView)findViewById(R.id.locationTV);
-
-        imageView = (ImageView)findViewById(R.id.addImageIV);
-        //inserts a placeholder image until an image is taken
-        imageView.setImageResource(R.drawable.placeholder);
-
-        locationButton = (Button)findViewById(R.id.locationButton);
-        locationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                GetCurrentLocation();
-            }
-        });
-
-        addImageButton = (Button)findViewById(R.id.addImageButton);
-        addImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TakePicture();
-            }
-        });
-
-        addButton = (Button)findViewById(R.id.addButton);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AddItem();
-            }
-        });
+        WebView webView = (WebView)findViewById(R.id.webView);
+        webView.loadUrl("file:///android_asset/newItem.html");
+        //sets the background to transparent in order to see the same background across activities
+        webView.setBackgroundColor(0);
+        webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
+        WebSettings webSettings = webView.getSettings();
+        //enable javascript
+        webSettings.setJavaScriptEnabled(true);
+        webView.addJavascriptInterface(new WebViewInterface(this), "Android");
 
         //starts location updates
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
@@ -138,67 +114,81 @@ public class NewActivity extends Activity
         return super.onOptionsItemSelected(item);
     }
 
-    private void TakePicture()
+
+
+
+
+    private class WebViewInterface
     {
-        //the current time in milliseconds is used to create a unique filename
-        Calendar cal = Calendar.getInstance();
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), ("finder_" + cal.getTimeInMillis() + ".jpg"));
-        Log.i("FilePath", file.getAbsolutePath());
-        if (file.exists())
+        Context context;
+        public WebViewInterface(Context context)
         {
-            //deletes the file if one already exists
-            file.delete();
+            this.context = context;
         }
-        try
-        {
-            file.createNewFile();
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
-        }
-        uri = Uri.fromFile(file);
 
-        //creates and sends the intent to the camera app
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-        startActivityForResult(intent, 100);
-    }
-
-    private void GetCurrentLocation()
-    {
-        //check to see if location returns null
-        //if it does check to see if the phones location provider is on
-        //display note saying location services need to be on, or unable to get current location please wait 30 seconds and try again
-        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        Log.i("NewActivity: Location", String.valueOf(location.getLatitude()) + " " + String.valueOf(location.getLongitude()));
-        locationTextView.setText("Longitude: " + String.valueOf(location.getLongitude()) + ", Latitude: " + String.valueOf(location.getLatitude()));
-    }
-
-    //adds item to the list and saves it
-    private void AddItem()
-    {
-        locationManager.removeUpdates(locationListener);
-        long id = random.nextLong();
-        String name = nameEditText.getText().toString();
-        String locationName = locationNameEditText.getText().toString();
-
-        Item item = new Item(id, name, imageSource, locationName, location);
-        DataManager.items.add(item);
-        try
+        @JavascriptInterface
+        public void TakePicture()
         {
-            DataManager.SaveItems(this);
+            //the current time in milliseconds is used to create a unique filename
+            Calendar cal = Calendar.getInstance();
+            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), ("finder_" + cal.getTimeInMillis() + ".jpg"));
+            Log.i("FilePath", file.getAbsolutePath());
+            if (file.exists())
+            {
+                //deletes the file if one already exists
+                file.delete();
+            }
+            try
+            {
+                file.createNewFile();
+            }
+            catch(IOException e)
+            {
+                e.printStackTrace();
+            }
+            uri = Uri.fromFile(file);
+
+            //creates and sends the intent to the camera app
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+            startActivityForResult(intent, 100);
         }
-        catch (JSONException e)
+
+        @JavascriptInterface
+        public void GetCurrentLocation()
         {
-            e.printStackTrace();
+            //check to see if location returns null
+            //if it does check to see if the phones location provider is on
+            //display note saying location services need to be on, or unable to get current location please wait 30 seconds and try again
+            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Log.i("NewActivity: Location", String.valueOf(location.getLatitude()) + " " + String.valueOf(location.getLongitude()));
+            locationTextView.setText("Longitude: " + String.valueOf(location.getLongitude()) + ", Latitude: " + String.valueOf(location.getLatitude()));
         }
-        catch (IOException e)
+
+        //adds item to the list and saves it
+        @JavascriptInterface
+        public void AddItem(String name, String locationName)
         {
-            e.printStackTrace();
+            locationManager.removeUpdates(locationListener);
+            long id = random.nextLong();
+
+            Item item = new Item(id, name, imageSource, locationName, location);
+            DataManager.items.add(item);
+            try
+            {
+                DataManager.SaveItems(context);
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            //returns to the main screen
+            Intent intent = new Intent(context, MainActivity.class);
+            startActivity(intent);
         }
-        //returns to the main screen
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
     }
 }

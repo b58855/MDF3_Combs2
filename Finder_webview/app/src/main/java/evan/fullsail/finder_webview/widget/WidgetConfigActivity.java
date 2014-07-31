@@ -22,8 +22,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RemoteViews;
 
-import evan.fullsail.finder.MainActivity;
-import evan.fullsail.finder.R;
+import evan.fullsail.finder_webview.MainActivity;
+import evan.fullsail.finder_webview.R;
 
 public class WidgetConfigActivity extends Activity
 {

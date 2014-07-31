@@ -19,8 +19,8 @@ import android.net.Uri;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-import evan.fullsail.finder.MainActivity;
-import evan.fullsail.finder.R;
+import evan.fullsail.finder_webview.MainActivity;
+import evan.fullsail.finder_webview.R;
 
 public class WidgetProvider extends AppWidgetProvider
 {

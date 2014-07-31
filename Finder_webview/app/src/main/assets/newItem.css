@@ -1,0 +1,43 @@
+@charset "utf-8";
+/**
+ * Created by:  Evan on 7/29/2014
+ * Last Edited: 7/29/2014
+ * Project:     Finder
+ * Package:     assets
+ * File:        newItem.css
+ * Purpose:     Controls how the HTML elements on screen style themselves.
+ */
+
+body
+{
+	color: #000;
+	text-align: center;
+}
+label 
+{
+	text-align: left;
+	float: left;
+}
+.textfields 
+{
+	min-width: 75px;
+	max-width: 500px;
+	width: 100%;
+	height: 35px;
+}
+.buttons {
+	height: 35px;
+	min-width: 50%;
+}
+div {
+	margin-bottom: 5px;
+	padding: 2px;
+}
+#submitButton {
+	width: 100%;
+}
+img {
+	height: 100pt;
+	width: auto;
+	text-align: center;
+}

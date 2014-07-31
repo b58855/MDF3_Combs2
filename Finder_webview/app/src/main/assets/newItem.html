@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <!--
+    * Created by:  Evan on 7/29/2014
+    * Last Edited: 7/29/2014
+    * Project:     Finder
+    * Package:     assets
+    * File:        newItem.html
+    * Purpose:     The HTML layout for the Add New Item interface.
+    -->
+
+    <link href="newItem.css" rel="stylesheet" />
+
+</head>
+
+<body>
+
+    <div id="nameDiv">
+        <label for="nameText">Name:</label>
+        <input type="text" name="name" id="nameText" class="textfields"/>
+    </div>
+
+    <div id="imageDiv">
+    	<div>
+        	<img src="" alt="Image" class=""/>
+        </div>
+        <div>
+        	<input name="takeImage" type="button" value="Take Image" id="imageButton" class="buttons" onclick="takePicture();"/>
+        </div>
+    </div>
+
+    <div id="locationDiv">
+    	<div>
+        	<input name="getLocation" type="button" value="Get Location" id="locationButton" class="buttons" onclick="getLoc();"/>
+        </div>
+        <div>
+        	<label for="locationNameText">Location Name:</label>
+        	<input type="text" name="locationName" id="locationNameText" class="textfields"/>
+        </div>
+    </div>
+
+    <div id="submitDiv">
+    	<input name="submit" type="button" value="Submit" id="submitButton" class="buttons" onclick="submit();"/>
+    </div>
+
+
+	<script src="newItem.js"/>
+	<script>
+        takePicture();
+        getLoc();
+        submit();
+	</script>
+
+</body>
+</html>

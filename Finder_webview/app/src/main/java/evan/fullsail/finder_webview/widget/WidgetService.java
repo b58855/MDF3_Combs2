@@ -35,10 +35,10 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import evan.fullsail.finder.DataManager;
-import evan.fullsail.finder.Item;
-import evan.fullsail.finder.MainActivity;
-import evan.fullsail.finder.R;
+import evan.fullsail.finder_webview.DataManager;
+import evan.fullsail.finder_webview.Item;
+import evan.fullsail.finder_webview.MainActivity;
+import evan.fullsail.finder_webview.R;
 
 public class WidgetService extends Service
 {
