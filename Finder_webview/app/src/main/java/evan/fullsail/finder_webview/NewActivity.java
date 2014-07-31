@@ -1,6 +1,6 @@
 /**
  * Created by: Evan on 7/15/2014
- * Last Edited: 7/17/2014
+ * Last Edited: 7/31/2014
  * Project: Finder
  * Package: evan.fullsail.finder
  * File: NewActivity.java
@@ -25,14 +25,11 @@ import android.view.MenuItem;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import org.json.JSONException;
 
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
@@ -41,11 +38,9 @@ import java.util.Random;
 public class NewActivity extends Activity
 {
     WebView webView;
-    TextView locationTextView;
-    ImageView imageView;
-    String imageSource;
-    String itemName;
-    String locName;
+    String imageSource = "";
+    String itemName = "";
+    String locName = "";
     String sourceHtml;
     String displayHtml;
     Random random = new Random();
@@ -74,17 +69,17 @@ public class NewActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new);
 
-        try {
+        try
+        {
             sourceHtml = HtmlToString();
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
 
         webView = (WebView)findViewById(R.id.webView);
-        displayHtml = sourceHtml.replaceAll("%NAME_VALUE%", "");
-        displayHtml = displayHtml.replaceAll("%LOC_NAME_VALUE%", "");
-        displayHtml = displayHtml.replaceAll("%IMG_SRC%", "");
-        webView.loadDataWithBaseURL("file:///android_asset/newItem.html", displayHtml, "text/html", "utf-8", null);
+        LoadHtml();
         //sets the background to transparent in order to see the same background across activities
         webView.setBackgroundColor(0);
         webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
@@ -106,10 +101,7 @@ public class NewActivity extends Activity
         {
             //displays the image just taken
             imageSource = uri.toString();
-            displayHtml = sourceHtml.replaceAll("%NAME_VALUE%", itemName);
-            displayHtml = displayHtml.replaceAll("%LOC_NAME_VALUE%", locName);
-            displayHtml = displayHtml.replaceAll("%IMG_SRC%", imageSource);
-            webView.loadDataWithBaseURL("file:///android_asset/newItem.html", displayHtml, "text/html", "utf-8", null);
+            LoadHtml();
         }
     }
 
@@ -149,6 +141,19 @@ public class NewActivity extends Activity
         return a;
     }
 
+    //replaces certian HTML elements then loads the HTML
+    private void LoadHtml()
+    {
+        //replaces sections of string with the correct data
+        displayHtml = sourceHtml.replaceAll("%NAME_VALUE%", itemName);
+        displayHtml = displayHtml.replaceAll("%LOC_NAME_VALUE%", locName);
+        displayHtml = displayHtml.replaceAll("%IMG_SRC%", imageSource);
+        //uses the unaltered HTML to load the CSS and Javascript then loads the new altered HTML
+        webView.loadDataWithBaseURL("file:///android_asset/newItem.html", displayHtml, "text/html", "utf-8", null);
+    }
+
+
+    //connects Javascript to Java
     private class WebViewInterface
     {
         Activity activity;
@@ -157,6 +162,7 @@ public class NewActivity extends Activity
             this.activity = activity;
         }
 
+        //sends an intent to the camera app
         @JavascriptInterface
         public void TakePicture(String name, String locationName)
         {
@@ -187,6 +193,7 @@ public class NewActivity extends Activity
             startActivityForResult(intent, 100);
         }
 
+        //gets the current location
         @JavascriptInterface
         public void GetCurrentLocation()
         {

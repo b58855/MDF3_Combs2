@@ -1,6 +1,6 @@
 /**
  * Created by:  Evan on 7/29/2014
- * Last Edited: 7/29/2014
+ * Last Edited: 7/31/2014
  * Project:     Finder
  * Package:     assets
  * File:        newItem.js
